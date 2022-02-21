@@ -58,6 +58,29 @@ def Recognize():
                 cos = urllib.parse.unquote(Url)
                 cos1 = urllib.parse.unquote(Url).replace(" ","") #Usuwa %20 z linku
                 Chrome.get(cos1)
+            if 'timer' in command:
+                def czas(t):
+                    while t:
+                        mins, secs = divmod(t, 60) 
+                        timer = '{:02d}:{:02d}'.format(mins, secs)
+                        print(timer, end="\r")
+                        time.sleep(1)
+                        t -= 1
+                        czas(int(t))
+                        
+                    timer = command.replace('timer set', '')
+                    TimerScreen = Toplevel(root)
+                    TimerScreen.geometry("400x400")
+                    TimerScreen.title("Timer")
+                    Label(TimerScreen, text = t).pack()                        
+                    e.delete(0, END)
+                    e.insert(0, f"Setting timer to: {timer}")
+                    engine.say(f"Setting timer to {timer}")
+                    engine.runAndWait()
+                    if t == 0:
+                        engine.say("Time is over!")
+                        engine.runAndWait()
+                        TimerScreen.destroy()
             
 
     except:
