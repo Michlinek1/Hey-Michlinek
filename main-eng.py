@@ -1,3 +1,5 @@
+from installer import Installing
+Installing()
 from tkinter import *
 import speech_recognition as sr
 import pyttsx3
@@ -6,15 +8,19 @@ import datetime
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import urllib.parse
+from Feelings import *
+import os
 
 
 
 
 
+
+
+Chrome = webdriver.Chrome(ChromeDriverManager().install())
 root = Tk()
 r = sr.Recognizer()
 engine = pyttsx3.init()
-Chrome = webdriver.Chrome(ChromeDriverManager().install())
 
 root.title("Hej Michał")
 root.geometry("800x800")
@@ -49,45 +55,67 @@ def Recognize():
                 engine.say(f"Current date is {CurrentDate}")
                 engine.runAndWait()
             if 'weather' in command:
-                Weather = command.replace("what's the weather like in","")
-                e.delete(0, END)
-                e.insert(0, f"Current weather in {Weather}")
-                engine.say("Opening Chrome")
-                engine.runAndWait()
-                Url = f"https://www.weather-forecast.com/locations/{Weather}/forecasts/latest"
-                cos = urllib.parse.unquote(Url)
-                cos1 = urllib.parse.unquote(Url).replace(" ","") #Usuwa %20 z linku
-                Chrome.get(cos1)
-            if 'timer' in command:
-                def czas(t):
-                    while t:
-                        mins, secs = divmod(t, 60) 
-                        timer = '{:02d}:{:02d}'.format(mins, secs)
-                        print(timer, end="\r")
-                        time.sleep(1)
-                        t -= 1
-                        czas(int(t))
-                        
-                    timer = command.replace('timer set', '')
-                    TimerScreen = Toplevel(root)
-                    TimerScreen.geometry("400x400")
-                    TimerScreen.title("Timer")
-                    Label(TimerScreen, text = t).pack()                        
+                    Weather = command.replace("what's the weather like in","")
                     e.delete(0, END)
-                    e.insert(0, f"Setting timer to: {timer}")
-                    engine.say(f"Setting timer to {timer}")
+                    e.insert(0, f"Current weather in {Weather}")
+                    engine.say("Opening Chrome")
                     engine.runAndWait()
-                    if t == 0:
-                        engine.say("Time is over!")
-                        engine.runAndWait()
-                        TimerScreen.destroy()
+                    Url = f"https://www.weather-forecast.com/locations/{Weather}/forecasts/latest"
+                    urllib.parse.unquote(Url)
+                    cos1 = urllib.parse.unquote(Url).replace(" ","") #Usuwa %20 z linku
+                    Chrome.get(cos1)
+            if 'save' in command:
+                f = open("List.txt", "r")
+                Saving = command.replace('save', '')
+                SavingTxt = [Saving]
+                e.delete(0, END)
+                e.insert(0  , Saving)
+                engine.say(f"Saving {Saving}")
+                engine.runAndWait()
+                with open('List.txt', "a") as f:
+                    f.writelines(SavingTxt)
+                    f.close()
+            if 'read' in command:
+                with open('List.txt', "r") as f:
+                    ReadLines = f.readlines()
+                    f.close()
+                e.delete(0, END)
+                e.insert(0, "Reading your saved lines")
+                engine.say(f"Saved lines: {ReadLines}")
+                engine.runAndWait()
+                e.delete(0, END)
+                e.insert(0, "Saying...")
+                Feelings()
+            if 'help' in command:
+                Help = Toplevel(root)
+                Help.title("Available commands")
+                Help.geometry("800x800")
+                Label(Help, text = f"Available commands:\nplay\ndate\nweather\nsave\nread\nclose - Depends of file's location\nfeel", font=('Helvetica bold',25)).pack()
+            if 'close' in command:
+                close = command.replace('close','')
+                e.delete(0, END)
+                e.insert(0, f"Closing {close}")
+                engine.say(f"Closing {close} now")
+                engine.runAndWait()
+                os.system(f"TASKKILL /F /IM {close}.exe")
             
 
+
+
+
+            else:
+                e.delete(0, END)
+
+
+                 
+  
     except:
         e.delete(0,END)
         e.insert(0, "Try again!")
         engine.say("I don't understand you")
         engine.runAndWait()
+        
+
 
 
 
