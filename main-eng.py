@@ -5,8 +5,7 @@ import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 import datetime
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import webbrowser
 import urllib.parse
 from Feelings import *
 import os
@@ -17,7 +16,7 @@ import os
 
 
 
-Chrome = webdriver.Chrome(ChromeDriverManager().install())
+
 root = Tk()
 r = sr.Recognizer()
 engine = pyttsx3.init()
@@ -60,10 +59,10 @@ def Recognize():
                     e.insert(0, f"Current weather in {Weather}")
                     engine.say("Opening Chrome")
                     engine.runAndWait()
-                    Url = f"https://www.weather-forecast.com/locations/{Weather}/forecasts/latest"
-                    urllib.parse.unquote(Url)
-                    cos1 = urllib.parse.unquote(Url).replace(" ","") #Usuwa %20 z linku
-                    Chrome.get(cos1)
+                    url = f'https://www.weather-forecast.com/locations/{Weather}/forecasts/latest'
+                    urllib.parse.unquote(url)
+                    cos1 = urllib.parse.unquote(url).replace(" ","") #Usuwa %20 z linku
+                    webbrowser.open(cos1, new=2)
             if 'save' in command:
                 f = open("List.txt", "r")
                 Saving = command.replace('save', '')
