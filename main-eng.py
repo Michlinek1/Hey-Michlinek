@@ -1,21 +1,18 @@
 from installer import Installing
+
 Installing()
+import datetime
+import os
+import urllib.parse
+import webbrowser
 from tkinter import *
-import speech_recognition as sr
+
 import pyttsx3
 import pywhatkit
-import datetime
-import webbrowser
-import urllib.parse
+import speech_recognition as sr
+from translate import Translator
+
 from Feelings import *
-import os
-
-
-
-
-
-
-
 
 root = Tk()
 r = sr.Recognizer()
@@ -97,13 +94,27 @@ def Recognize():
                 engine.say(f"Closing {close} now")
                 engine.runAndWait()
                 os.system(f"TASKKILL /F /IM {close}.exe")
-            
+            if 'Translate' in command:
+                def Translate():
+                    trans = Translator(to_lang="pl")
+                    translation = trans.translate(x.get())
+                    Label(TransWindow, text = f"Translated word: {translation}").pack()
+                engine.say("Opening translator now")
+                engine.runAndWait()
+                TransWindow = Toplevel(root)
+                TransWindow.title("Translator")
+                TransWindow.geometry("800x800")
+                x = Entry(TransWindow, width=200)
+                x.pack(padx = 50)
+                TranslateButton = Button(TransWindow, text = "Translate!", command = Translate, width=20, height = 5)
+                TranslateButton.pack(pady = 100)
 
 
 
 
             else:
                 e.delete(0, END)
+                e.insert(0, command)
 
 
                  
@@ -121,6 +132,7 @@ def Recognize():
 
 Przycisk = Button(root, text = "Execute the command!", command=Recognize, width=20, height = 5)
 Przycisk.pack(pady = 100)
+
 
 
 
