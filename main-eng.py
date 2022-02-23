@@ -11,7 +11,7 @@ import pyttsx3
 import pywhatkit
 import speech_recognition as sr
 from translate import Translator
-
+from langdetect import detect, DetectorFactory #Changing it soon (Doesn't work correctly)
 from Feelings import *
 
 root = Tk()
@@ -96,9 +96,25 @@ def Recognize():
                 os.system(f"TASKKILL /F /IM {close}.exe")
             if 'Translate' in command:
                 def Translate():
-                    trans = Translator(to_lang="pl")
-                    translation = trans.translate(x.get())
-                    Label(TransWindow, text = f"Translated word: {translation}").pack()
+                    DetectorFactory.seed = 0
+                    LangDetect = detect(x.get())
+                    if str(Stringx.get()) == "1":
+                        trans = Translator(to_lang="pl")
+                        translation = trans.translate(x.get())
+                        Label(TransWindow, text = f"Translated from {LangDetect} to Polish: {translation}").pack()
+                    elif str(Stringx.get()) == "2":
+                        trans = Translator(to_lang="es")
+                        translation = trans.translate(x.get())
+                        Label(TransWindow, text = f"Translated from {LangDetect} to Spanish: {translation}").pack()
+                    elif str(Stringx.get()) == "3":
+                        trans = Translator(to_lang="de")
+                        translation = trans.translate(x.get())
+                        Label(TransWindow, text = f"Translated from {LangDetect} to German: {translation}").pack()
+                    else:
+                        Label(TransWindow, text = f"error").pack()
+
+
+                    
                 engine.say("Opening translator now")
                 engine.runAndWait()
                 TransWindow = Toplevel(root)
@@ -106,8 +122,10 @@ def Recognize():
                 TransWindow.geometry("800x800")
                 x = Entry(TransWindow, width=200)
                 x.pack(padx = 50)
-                TranslateButton = Button(TransWindow, text = "Translate!", command = Translate, width=20, height = 5)
-                TranslateButton.pack(pady = 100)
+                Stringx = StringVar()
+                Radiobutton(TransWindow, text="Polish", variable=Stringx, value = 1 , command = Translate).pack()
+                Radiobutton(TransWindow, text="Spanish", variable=Stringx, value = 2 , command = Translate).pack()
+                Radiobutton(TransWindow, text="German", variable=Stringx, value = 3 , command = Translate).pack()
 
 
 
@@ -123,7 +141,7 @@ def Recognize():
         e.delete(0,END)
         e.insert(0, "Try again!")
         engine.say("I don't understand you")
-        engine.runAndWait()
+       #engine.runAndWait()
         
 
 
