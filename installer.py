@@ -12,7 +12,8 @@ def Installing():
         import datetime
         from selenium import webdriver
         from webdriver_manager.chrome import ChromeDriverManager
-    except Exception:
+        from translate import Translator
+    except ImportError:
         os.system("pip install -r requirements.txt")
 
 
