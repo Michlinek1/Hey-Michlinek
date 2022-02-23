@@ -2,4 +2,5 @@ pyttsx3==2.90
 pywhatkit==5.3
 selenium==4.1.0
 SpeechRecognition==3.8.1
+translate==3.6.1
 webdriver_manager==3.5.2
