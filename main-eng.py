@@ -14,6 +14,7 @@ from translate import Translator
 from langdetect import detect, DetectorFactory #Changing it soon (Doesn't work correctly)
 from Feelings import *
 
+
 root = Tk()
 r = sr.Recognizer()
 engine = pyttsx3.init()
@@ -112,6 +113,15 @@ def Recognize():
                         Label(TransWindow, text = f"Translated from {LangDetect} to German: {translation}").pack()
                     else:
                         Label(TransWindow, text = f"error").pack()
+            
+            
+            if 'password' in command:
+                e.delete(0,END)
+                e.insert(0,"Opening Password Checker now")
+                engine.say("Opening password checker")
+                engine.runAndWait()
+                os.system("python passchecker.py")
+
 
 
                     
@@ -141,7 +151,7 @@ def Recognize():
         e.delete(0,END)
         e.insert(0, "Try again!")
         engine.say("I don't understand you")
-       #engine.runAndWait()
+        engine.runAndWait()
         
 
 
