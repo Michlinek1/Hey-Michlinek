@@ -1,3 +1,4 @@
+#DO NOT EDIT THAT!
 langdetect==1.0.9
 pyttsx3==2.90
 pywhatkit==5.3
