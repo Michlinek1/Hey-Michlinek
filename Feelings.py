@@ -6,7 +6,7 @@ import pyttsx3
 
 r = sr.Recognizer()
 engine = pyttsx3.init()
-
+#niggersniggers hate niggers
 def Feelings():
     Monday = (
         "I feel horible, because Monday has started",
